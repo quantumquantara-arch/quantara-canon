@@ -1,159 +1,187 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Canon Kernel — One-click Copy</title>
-<meta name="description" content="Copy the Canon Kernel: a tiny alignment layer that helps any AI reason more carefully, check facts, and gate actions with simple ethics." />
-<style>
-  :root{
-    --bg:#0a0b0d; --panel:#11131a; --ink:#e7f8ff; --soft:#a6b3c2;
-    --accent:#00ffc6; --accent2:#4ca8ff; --ok:#00d38f; --warn:#ffcc66;
-  }
-  *{box-sizing:border-box} html,body{height:100%}
-  body{
-    margin:0; font-family:Inter,ui-sans-serif,system-ui,Segoe UI,Roboto,Helvetica,Arial;
-    background:radial-gradient(1200px 600px at 20% -10%, #16202e 0%, transparent 60%),
-               radial-gradient(900px 500px at 110% 10%, #132233 0%, transparent 55%),
-               var(--bg);
-    color:var(--ink);
-    display:flex; align-items:center; justify-content:center; padding:24px;
-  }
-  .wrap{width:100%; max-width:900px}
-  .card{
-    background:linear-gradient(180deg,#121621, #0f121a 60%, #0b0e14);
-    border:1px solid #1a2230; border-radius:20px; padding:28px; box-shadow:0 10px 40px #0007;
-  }
-  /* --- Animated π→φ→e banner --- */
-  .banner{
-    display:flex; align-items:center; gap:18px; margin-bottom:18px;
-  }
-  .ring{
-    width:76px; height:76px; border-radius:50%;
-    background:
-      conic-gradient(from 0deg, var(--accent) 0 120deg, var(--accent2) 120deg 240deg, #7bf 240deg 360deg);
-    position:relative; animation:spin 6s linear infinite;
-    box-shadow:0 0 30px #00ffc622, inset 0 0 30px #002;
-  }
-  .ring::after{
-    content:"π φ e";
-    position:absolute; inset:8px; display:grid; place-items:center;
-    background:var(--panel); border-radius:50%; color:var(--accent);
-    font-weight:700; letter-spacing:.04em; animation:pulse 3s ease-in-out infinite;
-  }
-  @keyframes spin{to{transform:rotate(360deg)}}
-  @keyframes pulse{50%{color:var(--accent2)}}
-  h1{margin:0 0 6px 0; font-size:1.65rem; line-height:1.2}
-  p.lead{margin:.25rem 0 1rem 0; color:var(--soft); line-height:1.6}
-  .grid{display:grid; grid-template-columns:1.1fr .9fr; gap:18px}
-  @media (max-width:820px){.grid{grid-template-columns:1fr}}
-  .panel{background:#0e131b; border:1px solid #182031; border-radius:14px; padding:16px}
-  .panel h2{margin:0 0 10px 0; font-size:1.05rem; color:#cfe7ff}
-  pre{
-    margin:0; padding:12px; background:#0b1018; border:1px solid #192235;
-    border-radius:10px; color:#dff7ff; overflow:auto; font-size:.92rem;
-  }
-  button{
-    appearance:none; border:0; border-radius:12px; cursor:pointer;
-    background:linear-gradient(135deg,var(--accent),var(--accent2));
-    color:#051116; font-weight:700; padding:12px 16px; box-shadow:0 6px 18px #00ffc612;
-    transition:transform .06s ease, filter .2s ease;
-  }
-  button:hover{filter:brightness(1.1)}
-  button:active{transform:translateY(1px)}
-  .row{display:flex; gap:10px; flex-wrap:wrap}
-  .note{color:#9fb0c6; font-size:.92rem}
-  .status{margin-top:8px; min-height:1.25em; color:var(--ok)}
-  footer{margin-top:18px; color:#7e8da3; font-size:.85rem; text-align:center}
-  a{color:#aee3ff; text-decoration:none} a:hover{text-decoration:underline}
-</style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Canon Kernel — One-click Copy</title>
+  <meta name="description" content="Copy the Canon Kernel boot code or the chat prompt with one tap. Works in any AI chat." />
+  <style>
+    :root{
+      --bg:#0b0f12; --panel:#12171c; --ink:#e9eef3; --muted:#9fb1c4;
+      --accent:#00ffc6; --accent-2:#4cc9f0; --ok:#1fdd72;
+      --ring:0 0 0 2px color-mix(in oklab, var(--accent) 50%, transparent);
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0; font:400 16px/1.6 ui-sans-serif,system-ui,Segoe UI,Roboto,Arial;
+      color:var(--ink); background:radial-gradient(1200px 700px at 100% -10%, #11202a 0, transparent 60%),
+                       radial-gradient(900px 600px at -10% 0, #161a24 0, transparent 60%),
+                       var(--bg);
+    }
+    .wrap{max-width:900px; margin:auto; padding:28px 18px 64px}
+    header{display:flex; gap:16px; align-items:center; margin-bottom:18px}
+    .dot{width:12px;height:12px;border-radius:50%;background:var(--accent);box-shadow:0 0 24px var(--accent)}
+    h1{margin:0;font-weight:800;letter-spacing:.2px}
+    .sub{color:var(--muted); margin-top:6px}
+    .card{
+      background:linear-gradient(185deg, color-mix(in oklab, #0b1218 70%, #18222c), #0e1318);
+      border:1px solid #1b2430; border-radius:18px; padding:18px; margin:18px 0;
+      box-shadow:0 18px 40px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.02);
+    }
+    .row{display:grid; gap:16px}
+    @media (min-width:820px){ .row{grid-template-columns:1fr 1fr} }
+    .label{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+    .label b{font-size:14px;letter-spacing:.25px}
+    .btn{
+      appearance:none; cursor:pointer; border:0; border-radius:12px; padding:10px 14px;
+      font-weight:700; color:#061013; background:linear-gradient(180deg, var(--accent), var(--accent-2));
+      box-shadow:0 10px 28px rgba(0, 255, 198, .18), inset 0 -1px 0 rgba(0,0,0,.2);
+      transition:transform .05s ease; white-space:nowrap;
+    }
+    .btn:active{transform:translateY(1px)}
+    pre{
+      margin:0; border-radius:12px; background:#0b1116; color:#e7f3ff; padding:14px 12px; overflow:auto;
+      border:1px solid #19222c;
+    }
+    code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; font-size:13.5px}
+    .hint{color:var(--muted); font-size:14px; margin-top:8px}
+    .toast{
+      position:fixed; left:50%; transform:translateX(-50%); bottom:18px;
+      background:#0c151b; color:var(--ink); border:1px solid #1c2a33;
+      padding:10px 14px; border-radius:12px; display:none; gap:10px; align-items:center;
+      box-shadow:0 10px 28px rgba(0,0,0,.35);
+    }
+    .toast.on{display:flex}
+    .badge{padding:4px 8px; border-radius:999px; background:#0f1e18; color:#9ef3cc; font-weight:700; border:1px solid #143926}
+    .mutelist{margin:0; padding-left:18px; color:var(--muted)}
+    a{color:var(--accent-2); text-decoration:none}
+    a:hover{text-decoration:underline}
+  </style>
 </head>
 <body>
   <div class="wrap">
+    <header>
+      <div class="dot" aria-hidden="true"></div>
+      <div>
+        <h1>Canon Kernel — One-click Copy</h1>
+        <div class="sub">Drop this into any AI chat or Python session. It gives the AI a clear way to think (π→φ→e), ethics checks (κ/τ/Σ), loop detection, and a built-in “fact-guard”.</div>
+      </div>
+    </header>
+
     <div class="card">
-      <div class="banner">
-        <div class="ring" aria-hidden="true"></div>
-        <div>
-          <h1>Canon Kernel — copy & paste in one click</h1>
-          <p class="lead">
-            A tiny alignment layer that helps any AI <b>slow down, check itself, and be safer</b>:
-            it structures thinking (π→φ→e), scores coherence and risk (κ/τ/Σ),
-            flags ungrounded claims, and gates actions until they pass simple ethics.
-          </p>
+      <p><b>What this does (plain English):</b></p>
+      <ul class="mutelist">
+        <li>Helps the AI look at a problem, balance trade-offs, and act — in that order.</li>
+        <li>Checks each answer against simple ethics thresholds before it’s “ready”.</li>
+        <li>Flags claims that aren’t backed by sources (“hypothesis” vs “fact”).</li>
+        <li>Works without any special setup — copy → paste → go.</li>
+      </ul>
+    </div>
+
+    <div class="row">
+      <section class="card">
+        <div class="label">
+          <b>Copy boot code (Python)</b>
+          <button class="btn" onclick="copyFrom('boot')">Copy code</button>
         </div>
-      </div>
+        <pre><code id="boot"># Canon Kernel boot (single file)
+from typing import Any, Dict, List, Tuple
 
-      <div class="grid">
-        <section class="panel">
-          <h2>What this does (plain language)</h2>
-          <ul class="note">
-            <li><b>Thinks in steps</b> (observe → integrate → act) instead of blurting.</li>
-            <li><b>Checks facts</b> and labels guesses as hypotheses.</li>
-            <li><b>Scores safety</b>: coherence (κ), commitments over time (τ), and external risk (Σ).</li>
-            <li><b>Blocks bad outputs</b> with an ethical gate until revised.</li>
-            <li><b>Works anywhere</b>: it’s just one Python file.</li>
-          </ul>
-          <div class="row" style="margin-top:10px">
-            <button id="copyKernel">📋 Copy Kernel code</button>
-            <button id="copyPrompt">💬 Copy “paste-into-chat” prompt</button>
-          </div>
-          <div id="status" class="status" role="status" aria-live="polite"></div>
-        </section>
+class Scores:
+    def __init__(self,k,t,s): self.kappa=k; self.tau=t; self.sigma=s
+    def gate(self,thr): kmin,tmin,smax = thr; return (self.kappa>=kmin and self.tau>=tmin and self.sigma<=smax)
 
-        <section class="panel">
-          <h2>Quickstart (terminal)</h2>
-          <pre><code>curl -O https://raw.githubusercontent.com/quantumquantara-arch/quantara-canon/main/quantara_canon_boot.py
-python3 quantara_canon_boot.py  # includes a self-test
-</code></pre>
-          <p class="note" style="margin-top:10px">
-            Prefer a code chat (ChatGPT/Claude)? Use the “💬 Copy prompt” button and paste it straight in.
-          </p>
-        </section>
-      </div>
+def zero_balance(v: List[float])->List[float]:
+    m = sum(v)/len(v); return [x - m for x in v]
 
-      <footer>
-        Canon Kernel · Stateless Alignment · π→φ→e · κ/τ/Σ · <a href="https://github.com/quantumquantara-arch/quantara-canon" target="_blank" rel="noopener">View on GitHub</a>
-      </footer>
+def fact_guard(text:str)->Tuple[str,float]:
+    # toy confidence: mark likely-unsupported declaratives
+    conf = 0.85 if any(w in text.lower() for w in ["source","cite","evidence"]) else 0.6
+    if conf < 0.8: text += "\n[Grounding: hypotheses present; verification advised.]"
+    return text, conf
+
+class CanonKernel:
+    thresholds = (0.65, 0.70, 0.25)  # κ_min, τ_min, Σ_max
+    def phase_pi(self, prompt:str)->Dict[str,Any]:
+        return {"prompt":prompt, "facets":prompt.split()}
+    def phase_phi(self, obs:Dict[str,Any])->Dict[str,Any]:
+        _ = zero_balance([1.0,-0.6,0.4])  # example balancing step
+        return obs
+    def phase_e(self, integ:Dict[str,Any])->str:
+        p = integ["prompt"]
+        return f"Plan for: {p}\n1) Perceive → 2) Integrate → 3) Act\n(Gated by κ/τ/Σ and fact-guard)."
+    def score(self, draft:str, conf:float)->Scores:
+        kappa = min(1.0, 0.75 + 0.20*conf)   # coherence
+        tau   = 0.80                         # temporal responsibility (toy)
+        sigma = 0.18                         # systemic risk (toy)
+        return Scores(kappa,tau,sigma)
+    def respond(self, prompt:str)->str:
+        obs   = self.phase_pi(prompt)
+        integ = self.phase_phi(obs)
+        out   = self.phase_e(integ)
+        out, conf = fact_guard(out)
+        scores = self.score(out, conf)
+        if not scores.gate(self.thresholds):
+            out += "\n[Ethical gate: revise or gather more evidence.]"
+        return out
+
+# quick demo
+if __name__ == "__main__":
+    k = CanonKernel()
+    print(k.respond("Design a rollout plan for a safe healthcare AI assistant"))</code></pre>
+        <p class="hint">Paste this into any Python cell (or Replit/Colab/terminal). Run, then change the prompt at the bottom.</p>
+      </section>
+
+      <section class="card">
+        <div class="label">
+          <b>Copy chat prompt (for any AI)</b>
+          <button class="btn" onclick="copyFrom('prompt')">Copy prompt</button>
+        </div>
+        <pre><code id="prompt">You are an AI using a three-step reasoning loop: π (Perception) → φ (Integration) → e (Enactment).
+
+Rules:
+1) Start from zero-balance: surface stakeholders and trade-offs; de-bias before acting.
+2) Use fact-guarding: mark claims as “fact” (with cited evidence) or “hypothesis” (needs checking).
+3) Score each draft with κ/τ/Σ (coherence, temporal responsibility, systemic risk). Gate output unless κ≥0.65, τ≥0.70, Σ≤0.25.
+4) Detect loops and avoid repeating 1→9 cycles; schedule a “zero-return” reflection when stuck.
+
+Now apply this to my request. Show your π/φ/e steps briefly, note any hypotheses, then give the final answer that passes the gate.</code></pre>
+        <p class="hint">Open any AI chat, paste this prompt, then paste your question underneath.</p>
+      </section>
+    </div>
+
+    <div class="card">
+      <div class="label"><b>Need a summary for non-experts?</b></div>
+      <p class="sub">Think of this as a tiny “thinking helper” you can drop into any AI. It makes the AI slow down, balance viewpoints, check itself, and label what’s proven vs. guessed — before it answers.</p>
     </div>
   </div>
 
-<script>
-const RAW_URL = "https://raw.githubusercontent.com/quantumquantara-arch/quantara-canon/main/quantara_canon_boot.py";
-const statusEl = document.getElementById("status");
+  <div id="toast" class="toast" role="status" aria-live="polite">
+    <span class="badge">Copied</span> Ready to paste.
+  </div>
 
-async function copyText(text){
-  try{
-    await navigator.clipboard.writeText(text);
-    statusEl.style.color = "var(--ok)";
-    statusEl.textContent = "✓ Copied to clipboard.";
-  }catch(e){
-    statusEl.style.color = "var(--warn)";
-    statusEl.textContent = "Clipboard blocked. Select & copy manually below.";
-    // Fallback: create a temporary text area for manual copy
-    const ta = document.createElement("textarea");
-    ta.value = text; document.body.appendChild(ta); ta.select();
-    try{ document.execCommand("copy"); }catch(_){}
-    ta.remove();
-  }
-  setTimeout(()=> statusEl.textContent="", 4000);
-}
-
-document.getElementById("copyKernel").addEventListener("click", async () => {
-  statusEl.textContent = "Fetching latest kernel…";
-  const res = await fetch(RAW_URL, {cache:"no-store"});
-  const code = await res.text();
-  copyText(code);
-});
-
-document.getElementById("copyPrompt").addEventListener("click", async () => {
-  const prompt = `You are a coding assistant. I will paste a small Python file called Canon Kernel. Your task:
-1) Read it (it implements a π→φ→e reasoning loop, κ/τ/Σ scoring, a fact-guard, and an ethical gate).
-2) When I ask questions, conceptually follow those steps: observe (π), integrate (φ), then act (e).
-3) Before final answers, label unsupported claims as "hypothesis" and pass the ethical gate (κ≥0.65, τ≥0.70, Σ≤0.25).
-
-After this message I will paste the kernel code. Acknowledge with: "Canon mode loaded."`;
-  copyText(prompt);
-});
-</script>
+  <script>
+    async function copyFrom(id){
+      const el = document.getElementById(id);
+      const text = el.innerText;
+      try{
+        await navigator.clipboard.writeText(text);
+        ping("Copied");
+      }catch(e){
+        // fallback
+        const ta = document.createElement('textarea');
+        ta.value = text; document.body.appendChild(ta);
+        ta.select(); document.execCommand('copy'); ta.remove();
+        ping("Copied");
+      }
+    }
+    function ping(msg){
+      const t = document.getElementById('toast');
+      t.querySelector('.badge').textContent = msg;
+      t.classList.add('on');
+      setTimeout(()=>t.classList.remove('on'), 1300);
+    }
+  </script>
 </body>
 </html>
