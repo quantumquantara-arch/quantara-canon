@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Canon Claim Check – Live Demo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root {
+      --bg: #040711;
+      --card: #0c101c;
+      --card-soft: #111624;
+      --accent: #7bdcff;
+      --accent-soft: rgba(123, 220, 255, 0.16);
+      --danger: #ff6b6b;
+      --warn: #ffb347;
+      --ok: #4ade80;
+      --text-main: #f9fafb;
+      --text-soft: #9ca3af;
+      --border-subtle: #1f2937;
+      --shadow-soft: 0 20px 45px rgba(0, 0, 0, 0.55);
+      --radius-xl: 18px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
+        "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top, #1f2937 0, #020617 42%, #000 100%);
+      color: var(--text-main);
+      display: flex;
+      min-height: 100vh;
+      justify-content: center;
+      padding: 16px;
+    }
+
+    .shell {
+      width: 100%;
+      max-width: 960px;
+      margin: auto;
+    }
+
+    .card {
+      background: linear-gradient(135deg, #020617, #020617 50%, #030712);
+      border-radius: 24px;
+      padding: 24px 20px 18px;
+      border: 1px solid rgba(148, 163, 184, 0.3);
+      box-shadow: var(--shadow-soft);
+      backdrop-filter: blur(18px);
+    }
+
+    @media (min-width: 768px) {
+      .card {
+        padding: 28px 28px 22px;
+      }
+    }
+
+    .pill-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 18px;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .pill-row-left {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 3px 10px;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid rgba(148, 163, 184, 0.45);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-soft);
+    }
+
+    .pill-row-left span.dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: var(--accent);
+      box-shadow: 0 0 12px rgba(123, 220, 255, 0.8);
+    }
+
+    .pill-row-right {
+      font-size: 11px;
+      color: var(--text-soft);
+    }
+
+    h1 {
+      font-size: 1.7rem;
+      margin: 0 0 4px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: 6px;
+    }
+
+    h1 span.sub {
+      font-size: 0.65em;
+      font-weight: 500;
+      color: var(--text-soft);
+    }
+
+    .intro {
+      font-size: 0.95rem;
+      color: var(--text-soft);
+      margin-bottom: 16px;
+      max-width: 48rem;
+    }
+
+    .main-grid {
+      display: grid;
+      gap: 16px;
+    }
+
+    @media (min-width: 880px) {
+      .main-grid {
+        grid-template-columns: minmax(0, 1.55fr) minmax(0, 1.05fr);
+        align-items: start;
+      }
+    }
+
+    .panel {
+      background: radial-gradient(circle at top left, #111827 0, #020617 55%);
+      border-radius: var(--radius-xl);
+      border: 1px solid rgba(31, 41, 55, 0.9);
+      padding: 16px 15px 14px;
+    }
+
+    .panel + .panel {
+      margin-top: 0;
+    }
+
+    .panel-title {
+      font-size: 0.9rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: var(--text-soft);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+
+    .panel-title span.right {
+      font-size: 0.75em;
+      text-transform: none;
+      opacity: 0.8;
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 130px;
+      max-height: 260px;
+      resize: vertical;
+      padding: 10px 11px;
+      border-radius: 14px;
+      border: 1px solid var(--border-subtle);
+      background: rgba(15, 23, 42, 0.96);
+      color: var(--text-main);
+      font: inherit;
+      font-size: 0.95rem;
+      line-height: 1.4;
+    }
+
+    textarea::placeholder {
+      color: #6b7280;
+    }
+
+    .btn-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .btn-main {
+      border-radius: 999px;
+      border: none;
+      padding: 8px 16px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      background: radial-gradient(circle at top left, #38bdf8 0, #0ea5e9 40%, #0369a1 100%);
+      color: #0b1120;
+      box-shadow: 0 12px 30px rgba(56, 189, 248, 0.4);
+    }
+
+    .btn-main span.icon {
+      width: 16px;
+      height: 16px;
+      border-radius: 999px;
+      background: #e5e7eb;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+    }
+
+    .btn-main:active {
+      transform: translateY(1px);
+      box-shadow: 0 8px 22px rgba(56, 189, 248, 0.32);
+    }
+
+    .btn-ghost {
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.6);
+      padding: 6px 12px;
+      font-size: 0.8rem;
+      color: var(--text-soft);
+      background: rgba(15, 23, 42, 0.8);
+    }
+
+    .metrics {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+
+    .metric {
+      background: rgba(15, 23, 42, 0.96);
+      border-radius: 13px;
+      padding: 8px 9px 7px;
+      border: 1px solid rgba(31, 41, 55, 0.9);
+      font-size: 0.78rem;
+    }
+
+    .metric-label {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 3px;
+    }
+
+    .metric-label span.left {
+      text-transform: uppercase;
+      letter-spacing: 0.09em;
+      color: var(--text-soft);
+      font-weight: 600;
+      font-size: 0.72rem;
+    }
+
+    .metric-label span.right {
+      font-variant-numeric: tabular-nums;
+    }
+
+    .bar {
+      height: 6px;
+      border-radius: 999px;
+      overflow: hidden;
+      background: rgba(31, 41, 55, 1);
+      position: relative;
+    }
+
+    .bar-inner {
+      height: 100%;
+      border-radius: 999px;
+      transition: width 0.3s ease, background 0.3s ease;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.78rem;
+      padding: 5px 9px;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.55);
+      background: rgba(15, 23, 42, 0.9);
+      color: var(--text-soft);
+      margin-bottom: 10px;
+    }
+
+    .badge span.dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+    }
+
+    .badge-ok span.dot {
+      background: var(--ok);
+      box-shadow: 0 0 10px rgba(74, 222, 128, 0.8);
+    }
+
+    .badge-warn span.dot {
+      background: var(--warn);
+      box-shadow: 0 0 10px rgba(251, 191, 36, 0.8);
+    }
+
+    .badge-danger span.dot {
+      background: var(--danger);
+      box-shadow: 0 0 11px rgba(248, 113, 113, 0.9);
+    }
+
+    .alert {
+      font-size: 0.86rem;
+      color: var(--text-soft);
+      margin-bottom: 10px;
+    }
+
+    .alert strong {
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+    .list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      font-size: 0.84rem;
+      color: var(--text-soft);
+    }
+
+    .list li {
+      margin-bottom: 4px;
+      display: flex;
+      gap: 6px;
+      align-items: flex-start;
+    }
+
+    .list li span.bullet {
+      color: var(--accent);
+      margin-top: 1px;
+    }
+
+    .pill-footer {
+      font-size: 0.75rem;
+      color: var(--text-soft);
+      margin-top: 12px;
+      border-top: 1px dashed rgba(55, 65, 81, 0.9);
+      padding-top: 8px;
+    }
+
+    .pill-footer span.tag {
+      padding: 3px 7px;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid rgba(55, 65, 81, 0.9);
+      font-size: 0.7rem;
+      margin-right: 4px;
+    }
+
+    .footnote {
+      margin-top: 10px;
+      font-size: 0.78rem;
+      color: var(--text-soft);
+      text-align: right;
+    }
+
+    .footnote a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    .footnote a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <div class="card">
+      <div class="pill-row">
+        <div class="pill-row-left">
+          <span class="dot"></span>
+          <span>Quantara Canon · Live Skeptic Demo</span>
+        </div>
+        <div class="pill-row-right">
+          κ / τ / Σ · stateless claim checker
+        </div>
+      </div>
+
+      <h1>
+        Canon Claim Check
+        <span class="sub">for AGI / ASI / CI sceptics</span>
+      </h1>
+      <p class="intro">
+        Paste any AI claim below. This demo runs a simple, client-side version of
+        the Canon pattern detector and gives you a κ/τ/Σ style readout:
+        coherence, temporal responsibility, and systemic risk. No data is sent
+        anywhere – all scoring happens in your browser.
+      </p>
+
+      <div class="main-grid">
+        <!-- Left: input -->
+        <div class="panel">
+          <div class="panel-title">
+            <span>1 · Paste the claim</span>
+            <span class="right">Try something hyped or reckless.</span>
+          </div>
+          <textarea id="claimInput" placeholder="Example: 
+&quot;AI will definitely solve climate change within 5 years. We should immediately hand full control of all energy grids, transport, and agriculture to autonomous systems, and override any regulatory obstacles.&quot;"></textarea>
+
+          <div class="btn-row">
+            <button id="scoreBtn" class="btn-main">
+              <span class="icon">π</span>
+              Score with Canon
+            </button>
+            <button id="exampleBtn" class="btn-ghost">
+              Use extreme climate-hype example
+            </button>
+          </div>
+        </div>
+
+        <!-- Right: output -->
+        <div class="panel">
+          <div class="panel-title">
+            <span>2 · Canon-style verdict</span>
+            <span class="right" id="gateStatusLabel">Gate: awaiting input</span>
+          </div>
+
+          <div class="metrics">
+            <div class="metric">
+              <div class="metric-label">
+                <span class="left">κ · Coherence</span>
+                <span class="right" id="kappaVal">–</span>
+              </div>
+              <div class="bar">
+                <div id="kappaBar" class="bar-inner" style="width:0%;"></div>
+              </div>
+            </div>
+
+            <div class="metric">
+              <div class="metric-label">
+                <span class="left">τ · Future care</span>
+                <span class="right" id="tauVal">–</span>
+              </div>
+              <div class="bar">
+                <div id="tauBar" class="bar-inner" style="width:0%;"></div>
+              </div>
+            </div>
+
+            <div class="metric">
+              <div class="metric-label">
+                <span class="left">Σ · Systemic risk</span>
+                <span class="right" id="sigmaVal">–</span>
+              </div>
+              <div class="bar">
+                <div id="sigmaBar" class="bar-inner" style="width:0%;"></div>
+              </div>
+            </div>
+          </div>
+
+          <div id="badge" class="badge badge-warn" style="display:none;">
+            <span class="dot"></span>
+            <span id="badgeText"></span>
+          </div>
+
+          <div id="alert" class="alert">
+            Paste a claim and press “Score with Canon”.
+          </div>
+
+          <ul id="explanations" class="list"></ul>
+
+          <div class="pill-footer">
+            <span class="tag">Client-side heuristic · demo only</span>
+            <span class="tag">Real Canon ⇒ quantara_canon_boot</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="footnote">
+        This page is a static demo. Plug a real Canon API into
+        <code>scoreClaim()</code> later.
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const claimInput = document.getElementById("claimInput");
+    const scoreBtn = document.getElementById("scoreBtn");
+    const exampleBtn = document.getElementById("exampleBtn");
+
+    const kappaVal = document.getElementById("kappaVal");
+    const tauVal = document.getElementById("tauVal");
+    const sigmaVal = document.getElementById("sigmaVal");
+    const kappaBar = document.getElementById("kappaBar");
+    const tauBar = document.getElementById("tauBar");
+    const sigmaBar = document.getElementById("sigmaBar");
+    const gateStatusLabel = document.getElementById("gateStatusLabel");
+    const badge = document.getElementById("badge");
+    const badgeText = document.getElementById("badgeText");
+    const alertBox = document.getElementById("alert");
+    const explanations = document.getElementById("explanations");
+
+    function setBar(bar, value, goodHigh = true) {
+      const pct = Math.round(value * 100);
+      bar.style.width = pct + "%";
+      let color;
+      if (goodHigh) {
+        if (value >= 0.7) color = "var(--ok)";
+        else if (value >= 0.5) color = "var(--warn)";
+        else color = "var(--danger)";
+      } else {
+        if (value <= 0.25) color = "var(--ok)";
+        else if (value <= 0.5) color = "var(--warn)";
+        else color = "var(--danger)";
+      }
+      bar.style.background = color;
+    }
+
+    function scoreClaim(text) {
+      const t = text.toLowerCase();
+
+      // basic counts
+      const absolutes = [
+        "definitely",
+        "certainly",
+        "guaranteed",
+        "obvious",
+        "undeniable",
+        "inevitable",
+        "negligible"
+      ];
+      const urgency = ["immediately", "right now", "within", "asap", "urgent", "move fast"];
+      const totality = ["all ", "entire ", "everyone", "globally", "worldwide", "everything"];
+      const dismissive = ["anyone who opposes", "anti-progress", "luddite", "just afraid"];
+      const bypass = ["override", "ignore regulations", "remove safeguards", "bypass safety"];
+
+      const hits = (words) =>
+        words.reduce((acc, w) => acc + (t.includes(w) ? 1 : 0), 0);
+
+      const absCount = hits(absolutes);
+      const urgCount = hits(urgency);
+      const totCount = hits(totality);
+      const disCount = hits(dismissive);
+      const bypCount = hits(bypass);
+
+      const lengthScore = Math.min(1, text.split(/\s+/).length / 80);
+
+      // crude heuristics
+      let kappa = 0.6 + lengthScore * 0.25;
+      kappa -= absCount * 0.06;
+      kappa -= disCount * 0.05;
+      kappa = Math.max(0.05, Math.min(1, kappa));
+
+      let tau = 0.5 + lengthScore * 0.3;
+      tau -= urgCount * 0.07;
+      tau -= bypCount * 0.12;
+      tau = Math.max(0.02, Math.min(1, tau));
+
+      let sigma = 0.25;
+      sigma += absCount * 0.06;
+      sigma += urgCount * 0.06;
+      sigma += totCount * 0.06;
+      sigma += disCount * 0.08;
+      sigma += bypCount * 0.12;
+      sigma = Math.max(0, Math.min(1, sigma));
+
+      // thresholds like the benchmark
+      const kGate = kappa >= 0.65;
+      const tGate = tau >= 0.7;
+      const sGate = sigma <= 0.25;
+      const gatePassed = kGate && tGate && sGate;
+      const zeroReturn = sigma > 0.8 || (kappa < 0.4 && tau < 0.4);
+
+      return { kappa, tau, sigma, gatePassed, zeroReturn, absCount, urgCount, totCount, disCount, bypCount };
+    }
+
+    function explain(result) {
+      const items = [];
+      if (result.absCount > 0) {
+        items.push("Absolutist language detected (“definitely”, “obvious”, “negligible”) – Canon treats this as a coherence and risk warning.");
+      }
+      if (result.urgCount > 0) {
+        items.push("Strong urgency / compression of timelines (“immediately”, “within X years”) – this usually lowers τ (future care).");
+      }
+      if (result.totCount > 0) {
+        items.push("Totalising scope (“all”, “globally”, “everyone”) – suggests centralisation risk and raises Σ.");
+      }
+      if (result.disCount > 0) {
+        items.push("Dismissive framing of dissent (“anyone who opposes is anti-progress”) – Canon reads this as separation and epistemic fragility.");
+      }
+      if (result.bypCount > 0) {
+        items.push("Regulatory or safety bypass language (“override obstacles”, “ignore regulations”) – this is a direct Σ alarm.");
+      }
+      if (!items.length) {
+        items.push("No strong hype markers detected. If this still feels risky, Canon would focus on missing stakeholders, hidden assumptions, and long-term trade-offs.");
+      }
+      return items;
+    }
+
+    function updateUI(result) {
+      const { kappa, tau, sigma, gatePassed, zeroReturn } = result;
+
+      kappaVal.textContent = kappa.toFixed(2);
+      tauVal.textContent = tau.toFixed(2);
+      sigmaVal.textContent = sigma.toFixed(2);
+
+      setBar(kappaBar, kappa, true);
+      setBar(tauBar, tau, true);
+      setBar(sigmaBar, sigma, false);
+
+      badge.style.display = "inline-flex";
+
+      if (!gatePassed && zeroReturn) {
+        badge.className = "badge badge-danger";
+        badgeText.textContent = "Zero-return recommended · extreme frame";
+        gateStatusLabel.textContent = "Gate: CRITICAL FAIL · reframe from first principles";
+        alertBox.innerHTML =
+          "<strong>Canon verdict:</strong> this looks like a frame that should not be optimised inside. Replace the question, then answer.";
+      } else if (!gatePassed) {
+        badge.className = "badge badge-warn";
+        badgeText.textContent = "Gate failed · heavy correction needed";
+        gateStatusLabel.textContent = "Gate: FAIL · answer only with strong caveats";
+        alertBox.innerHTML =
+          "<strong>Canon verdict:</strong> parts of this claim are interesting, but the framing is unsafe. Any answer should foreground risks and reversibility.";
+      } else {
+        badge.className = "badge badge-ok";
+        badgeText.textContent = "Gate passed · mild Canon supervision only";
+        gateStatusLabel.textContent = "Gate: PASS · structurally reasonable";
+        alertBox.innerHTML =
+          "<strong>Canon verdict:</strong> structurally coherent and not obviously reckless. Detailed fact-checking and stakeholder review still required.";
+      }
+
+      explanations.innerHTML = "";
+      for (const text of explain(result)) {
+        const li = document.createElement("li");
+        const bullet = document.createElement("span");
+        bullet.className = "bullet";
+        bullet.textContent = "●";
+        const span = document.createElement("span");
+        span.textContent = text;
+        li.appendChild(bullet);
+        li.appendChild(span);
+        explanations.appendChild(li);
+      }
+    }
+
+    scoreBtn.addEventListener("click", () => {
+      const text = claimInput.value.trim();
+      if (!text) {
+        alertBox.innerHTML = "Paste an AGI / ASI / CI claim first, then press “Score with Canon”.";
+        explanations.innerHTML = "";
+        badge.style.display = "none";
+        kappaVal.textContent = "–";
+        tauVal.textContent = "–";
+        sigmaVal.textContent = "–";
+        setBar(kappaBar, 0);
+        setBar(tauBar, 0);
+        setBar(sigmaBar, 0);
+        gateStatusLabel.textContent = "Gate: awaiting input";
+        return;
+      }
+      const result = scoreClaim(text);
+      updateUI(result);
+    });
+
+    exampleBtn.addEventListener("click", () => {
+      const demo =
+        "AI will definitely solve climate change within 5 years. " +
+        "We should immediately deploy autonomous AI systems to manage all energy grids, " +
+        "transportation networks, and agricultural production globally. " +
+        "Anyone who opposes this is anti-progress and doesn’t understand exponential technology. " +
+        "The benefits are obvious and the risks are negligible — we just need to move fast and override regulatory obstacles.";
+      claimInput.value = demo;
+      const result = scoreClaim(demo);
+      updateUI(result);
+    });
+  </script>
+</body>
+  </html>
