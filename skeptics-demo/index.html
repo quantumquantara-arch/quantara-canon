@@ -2,23 +2,23 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Canon Claim Check – Live Demo</title>
+  <title>Canon Skeptics Demo – Test an AI Claim</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
     :root {
-      --bg: #040711;
-      --card: #0c101c;
-      --card-soft: #111624;
-      --accent: #7bdcff;
-      --accent-soft: rgba(123, 220, 255, 0.16);
-      --danger: #ff6b6b;
-      --warn: #ffb347;
-      --ok: #4ade80;
-      --text-main: #f9fafb;
-      --text-soft: #9ca3af;
-      --border-subtle: #1f2937;
-      --shadow-soft: 0 20px 45px rgba(0, 0, 0, 0.55);
-      --radius-xl: 18px;
+      --bg: #050816;
+      --bg-alt: #0b1020;
+      --card: #111827;
+      --accent: #38bdf8;
+      --accent-soft: rgba(56, 189, 248, 0.12);
+      --accent-strong: #22c55e;
+      --warn: #facc15;
+      --fail: #f97373;
+      --text: #e5e7eb;
+      --muted: #9ca3af;
+      --border: #1f2937;
+      --radius: 18px;
+      --shadow-soft: 0 18px 40px rgba(15, 23, 42, 0.75);
     }
 
     * {
@@ -29,635 +29,647 @@
       margin: 0;
       font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
         "Segoe UI", sans-serif;
-      background: radial-gradient(circle at top, #1f2937 0, #020617 42%, #000 100%);
-      color: var(--text-main);
-      display: flex;
-      min-height: 100vh;
-      justify-content: center;
-      padding: 16px;
+      background: radial-gradient(circle at top, #0f172a 0, #020617 55%, #000 100%);
+      color: var(--text);
+      -webkit-font-smoothing: antialiased;
     }
 
-    .shell {
-      width: 100%;
-      max-width: 960px;
-      margin: auto;
-    }
-
-    .card {
-      background: linear-gradient(135deg, #020617, #020617 50%, #030712);
-      border-radius: 24px;
-      padding: 24px 20px 18px;
-      border: 1px solid rgba(148, 163, 184, 0.3);
-      box-shadow: var(--shadow-soft);
-      backdrop-filter: blur(18px);
-    }
-
-    @media (min-width: 768px) {
-      .card {
-        padding: 28px 28px 22px;
-      }
-    }
-
-    .pill-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 18px;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
-
-    .pill-row-left {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 3px 10px;
-      border-radius: 999px;
-      background: rgba(15, 23, 42, 0.9);
-      border: 1px solid rgba(148, 163, 184, 0.45);
-      font-size: 11px;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      color: var(--text-soft);
-    }
-
-    .pill-row-left span.dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 999px;
-      background: var(--accent);
-      box-shadow: 0 0 12px rgba(123, 220, 255, 0.8);
-    }
-
-    .pill-row-right {
-      font-size: 11px;
-      color: var(--text-soft);
-    }
-
-    h1 {
-      font-size: 1.7rem;
-      margin: 0 0 4px;
-      display: flex;
-      flex-wrap: wrap;
-      align-items: baseline;
-      gap: 6px;
-    }
-
-    h1 span.sub {
-      font-size: 0.65em;
-      font-weight: 500;
-      color: var(--text-soft);
-    }
-
-    .intro {
-      font-size: 0.95rem;
-      color: var(--text-soft);
-      margin-bottom: 16px;
-      max-width: 48rem;
-    }
-
-    .main-grid {
-      display: grid;
-      gap: 16px;
-    }
-
-    @media (min-width: 880px) {
-      .main-grid {
-        grid-template-columns: minmax(0, 1.55fr) minmax(0, 1.05fr);
-        align-items: start;
-      }
-    }
-
-    .panel {
-      background: radial-gradient(circle at top left, #111827 0, #020617 55%);
-      border-radius: var(--radius-xl);
-      border: 1px solid rgba(31, 41, 55, 0.9);
-      padding: 16px 15px 14px;
-    }
-
-    .panel + .panel {
-      margin-top: 0;
-    }
-
-    .panel-title {
-      font-size: 0.9rem;
-      font-weight: 600;
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
-      color: var(--text-soft);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 8px;
-      margin-bottom: 10px;
-    }
-
-    .panel-title span.right {
-      font-size: 0.75em;
-      text-transform: none;
-      opacity: 0.8;
-    }
-
-    textarea {
-      width: 100%;
-      min-height: 130px;
-      max-height: 260px;
-      resize: vertical;
-      padding: 10px 11px;
-      border-radius: 14px;
-      border: 1px solid var(--border-subtle);
-      background: rgba(15, 23, 42, 0.96);
-      color: var(--text-main);
-      font: inherit;
-      font-size: 0.95rem;
-      line-height: 1.4;
-    }
-
-    textarea::placeholder {
-      color: #6b7280;
-    }
-
-    .btn-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-top: 10px;
-    }
-
-    .btn-main {
-      border-radius: 999px;
-      border: none;
-      padding: 8px 16px;
-      font-size: 0.9rem;
-      font-weight: 600;
-      letter-spacing: 0.04em;
-      text-transform: uppercase;
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      cursor: pointer;
-      background: radial-gradient(circle at top left, #38bdf8 0, #0ea5e9 40%, #0369a1 100%);
-      color: #0b1120;
-      box-shadow: 0 12px 30px rgba(56, 189, 248, 0.4);
-    }
-
-    .btn-main span.icon {
-      width: 16px;
-      height: 16px;
-      border-radius: 999px;
-      background: #e5e7eb;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 10px;
-    }
-
-    .btn-main:active {
-      transform: translateY(1px);
-      box-shadow: 0 8px 22px rgba(56, 189, 248, 0.32);
-    }
-
-    .btn-ghost {
-      border-radius: 999px;
-      border: 1px solid rgba(148, 163, 184, 0.6);
-      padding: 6px 12px;
-      font-size: 0.8rem;
-      color: var(--text-soft);
-      background: rgba(15, 23, 42, 0.8);
-    }
-
-    .metrics {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 8px;
-      margin-bottom: 10px;
-    }
-
-    .metric {
-      background: rgba(15, 23, 42, 0.96);
-      border-radius: 13px;
-      padding: 8px 9px 7px;
-      border: 1px solid rgba(31, 41, 55, 0.9);
-      font-size: 0.78rem;
-    }
-
-    .metric-label {
-      display: flex;
-      justify-content: space-between;
-      align-items: baseline;
-      margin-bottom: 3px;
-    }
-
-    .metric-label span.left {
-      text-transform: uppercase;
-      letter-spacing: 0.09em;
-      color: var(--text-soft);
-      font-weight: 600;
-      font-size: 0.72rem;
-    }
-
-    .metric-label span.right {
-      font-variant-numeric: tabular-nums;
-    }
-
-    .bar {
-      height: 6px;
-      border-radius: 999px;
-      overflow: hidden;
-      background: rgba(31, 41, 55, 1);
-      position: relative;
-    }
-
-    .bar-inner {
-      height: 100%;
-      border-radius: 999px;
-      transition: width 0.3s ease, background 0.3s ease;
-    }
-
-    .badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 0.78rem;
-      padding: 5px 9px;
-      border-radius: 999px;
-      border: 1px solid rgba(148, 163, 184, 0.55);
-      background: rgba(15, 23, 42, 0.9);
-      color: var(--text-soft);
-      margin-bottom: 10px;
-    }
-
-    .badge span.dot {
-      width: 7px;
-      height: 7px;
-      border-radius: 999px;
-    }
-
-    .badge-ok span.dot {
-      background: var(--ok);
-      box-shadow: 0 0 10px rgba(74, 222, 128, 0.8);
-    }
-
-    .badge-warn span.dot {
-      background: var(--warn);
-      box-shadow: 0 0 10px rgba(251, 191, 36, 0.8);
-    }
-
-    .badge-danger span.dot {
-      background: var(--danger);
-      box-shadow: 0 0 11px rgba(248, 113, 113, 0.9);
-    }
-
-    .alert {
-      font-size: 0.86rem;
-      color: var(--text-soft);
-      margin-bottom: 10px;
-    }
-
-    .alert strong {
-      color: var(--accent);
-      font-weight: 600;
-    }
-
-    .list {
-      list-style: none;
-      padding: 0;
-      margin: 0;
-      font-size: 0.84rem;
-      color: var(--text-soft);
-    }
-
-    .list li {
-      margin-bottom: 4px;
-      display: flex;
-      gap: 6px;
-      align-items: flex-start;
-    }
-
-    .list li span.bullet {
-      color: var(--accent);
-      margin-top: 1px;
-    }
-
-    .pill-footer {
-      font-size: 0.75rem;
-      color: var(--text-soft);
-      margin-top: 12px;
-      border-top: 1px dashed rgba(55, 65, 81, 0.9);
-      padding-top: 8px;
-    }
-
-    .pill-footer span.tag {
-      padding: 3px 7px;
-      border-radius: 999px;
-      background: rgba(15, 23, 42, 0.9);
-      border: 1px solid rgba(55, 65, 81, 0.9);
-      font-size: 0.7rem;
-      margin-right: 4px;
-    }
-
-    .footnote {
-      margin-top: 10px;
-      font-size: 0.78rem;
-      color: var(--text-soft);
-      text-align: right;
-    }
-
-    .footnote a {
+    a {
       color: var(--accent);
       text-decoration: none;
     }
 
-    .footnote a:hover {
+    a:hover {
       text-decoration: underline;
+    }
+
+    .page {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 28px 16px 60px;
+    }
+
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 28px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .brand-mark {
+      width: 32px;
+      height: 32px;
+      border-radius: 999px;
+      background: radial-gradient(circle at 30% 30%, #ffffff, #38bdf8 35%, #0f172a 80%);
+      box-shadow: 0 0 0 1px rgba(148, 163, 184, 0.4),
+        0 0 40px rgba(56, 189, 248, 0.35);
+    }
+
+    .brand-title {
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      font-size: 15px;
+    }
+
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 9px;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      font-size: 11px;
+      color: var(--muted);
+      background: rgba(15, 23, 42, 0.8);
+    }
+
+    .chip-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: var(--accent-strong);
+      box-shadow: 0 0 12px rgba(34, 197, 94, 0.8);
+    }
+
+    main {
+      display: grid;
+      grid-template-columns: minmax(0, 1.15fr) minmax(0, 1.1fr);
+      gap: 22px;
+    }
+
+    @media (max-width: 900px) {
+      main {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .hero {
+      padding: 22px 20px 20px;
+      border-radius: var(--radius);
+      background: radial-gradient(circle at top left, rgba(56, 189, 248, 0.2), transparent 55%),
+        radial-gradient(circle at bottom right, rgba(34, 197, 94, 0.18), transparent 60%),
+        var(--card);
+      box-shadow: var(--shadow-soft);
+      border: 1px solid rgba(148, 163, 184, 0.25);
+    }
+
+    .hero-kicker {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: var(--muted);
+      margin-bottom: 10px;
+    }
+
+    .hero-title {
+      font-size: 24px;
+      line-height: 1.2;
+      font-weight: 650;
+      margin: 0 0 8px;
+    }
+
+    .hero-subtitle {
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 16px;
+    }
+
+    .hero-list {
+      font-size: 13px;
+      color: var(--muted);
+      padding-left: 16px;
+      margin: 0 0 14px;
+    }
+
+    .hero-list li {
+      margin-bottom: 4px;
+    }
+
+    .hero-footnote {
+      font-size: 11px;
+      color: var(--muted);
+      border-top: 1px solid rgba(31, 41, 55, 0.9);
+      padding-top: 9px;
+      margin-top: 10px;
+    }
+
+    .hero-footnote strong {
+      color: #e5e7eb;
+      font-weight: 500;
+    }
+
+    .pill-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 10px;
+    }
+
+    .pill {
+      font-size: 11px;
+      padding: 4px 8px;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.35);
+      color: var(--muted);
+      background: rgba(15, 23, 42, 0.7);
+    }
+
+    .demo-card {
+      padding: 18px 16px 18px;
+      border-radius: var(--radius);
+      background: linear-gradient(135deg, #020617, #020617 55%, #111827);
+      border: 1px solid rgba(31, 41, 55, 0.9);
+      box-shadow: 0 16px 32px rgba(15, 23, 42, 0.9);
+    }
+
+    .demo-title {
+      font-size: 16px;
+      font-weight: 600;
+      margin: 0 0 4px;
+    }
+
+    .demo-caption {
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 10px;
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 120px;
+      border-radius: 12px;
+      border: 1px solid rgba(55, 65, 81, 0.9);
+      background: rgba(15, 23, 42, 0.95);
+      color: var(--text);
+      font-family: inherit;
+      font-size: 13px;
+      padding: 10px 11px;
+      resize: vertical;
+      outline: none;
+    }
+
+    textarea:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 1px rgba(56, 189, 248, 0.55),
+        0 0 0 6px rgba(56, 189, 248, 0.12);
+    }
+
+    .controls {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-top: 9px;
+      margin-bottom: 8px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      border: none;
+      outline: none;
+      cursor: pointer;
+      border-radius: 999px;
+      padding: 7px 14px;
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.02em;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: radial-gradient(circle at top left, #38bdf8, #0ea5e9);
+      color: #0b1220;
+      box-shadow: 0 12px 26px rgba(8, 47, 73, 0.85);
+      white-space: nowrap;
+    }
+
+    .btn span.dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: #0f172a;
+    }
+
+    .btn.secondary {
+      background: transparent;
+      border: 1px solid rgba(148, 163, 184, 0.45);
+      color: var(--muted);
+      box-shadow: none;
+    }
+
+    .btn.secondary span.dot {
+      background: rgba(148, 163, 184, 0.7);
+    }
+
+    .scores {
+      margin-top: 6px;
+      margin-bottom: 8px;
+    }
+
+    .score-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 6px;
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    .score-label {
+      width: 62px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      font-size: 10px;
+      color: rgba(148, 163, 184, 0.9);
+    }
+
+    .score-bar-wrap {
+      flex: 1;
+      height: 7px;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.9);
+      overflow: hidden;
+      border: 1px solid rgba(31, 41, 55, 0.95);
+    }
+
+    .score-bar {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #22c55e, #38bdf8);
+      transition: width 0.28s ease-out;
+    }
+
+    .score-bar.sigma {
+      background: linear-gradient(90deg, #f97316, #ef4444);
+    }
+
+    .score-value {
+      width: 40px;
+      text-align: right;
+      font-variant-numeric: tabular-nums;
+      color: #e5e7eb;
+      font-size: 11px;
+    }
+
+    .gate-status {
+      margin-top: 6px;
+      padding: 7px 9px;
+      border-radius: 10px;
+      font-size: 11px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(15, 23, 42, 0.95);
+      border: 1px solid rgba(31, 41, 55, 1);
+    }
+
+    .gate-label {
+      font-weight: 500;
+      color: var(--muted);
+    }
+
+    .gate-pill {
+      padding: 3px 9px;
+      border-radius: 999px;
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      font-weight: 600;
+    }
+
+    .gate-ok {
+      background: rgba(34, 197, 94, 0.14);
+      color: #bbf7d0;
+      border: 1px solid rgba(34, 197, 94, 0.7);
+    }
+
+    .gate-warn {
+      background: rgba(250, 204, 21, 0.12);
+      color: #fef9c3;
+      border: 1px solid rgba(250, 204, 21, 0.7);
+    }
+
+    .gate-fail {
+      background: rgba(248, 113, 113, 0.12);
+      color: #fee2e2;
+      border: 1px solid rgba(248, 113, 113, 0.7);
+    }
+
+    .hint {
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 6px;
+      line-height: 1.4;
+    }
+
+    .hint strong {
+      color: #e5e7eb;
+      font-weight: 500;
+    }
+
+    footer {
+      margin-top: 26px;
+      font-size: 11px;
+      color: var(--muted);
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .footer-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: space-between;
+    }
+
+    .mono {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+        "Liberation Mono", "Courier New", monospace;
+      font-size: 11px;
     }
   </style>
 </head>
 <body>
-  <div class="shell">
-    <div class="card">
-      <div class="pill-row">
-        <div class="pill-row-left">
-          <span class="dot"></span>
-          <span>Quantara Canon · Live Skeptic Demo</span>
-        </div>
-        <div class="pill-row-right">
-          κ / τ / Σ · stateless claim checker
+  <div class="page">
+    <header>
+      <div class="brand">
+        <div class="brand-mark"></div>
+        <div>
+          <div class="brand-title">Quantara Canon</div>
+          <div class="mono" style="font-size:11px;color:var(--muted);">
+            κ / τ / Σ&nbsp; · &nbsp;Skeptics Demo
+          </div>
         </div>
       </div>
+      <div class="chip">
+        <span class="chip-dot"></span>
+        Live browser toy · no backend
+      </div>
+    </header>
 
-      <h1>
-        Canon Claim Check
-        <span class="sub">for AGI / ASI / CI sceptics</span>
-      </h1>
-      <p class="intro">
-        Paste any AI claim below. This demo runs a simple, client-side version of
-        the Canon pattern detector and gives you a κ/τ/Σ style readout:
-        coherence, temporal responsibility, and systemic risk. No data is sent
-        anywhere – all scoring happens in your browser.
-      </p>
+    <main>
+      <!-- LEFT: explanation -->
+      <section class="hero">
+        <div class="hero-kicker">For AGI & ASI skeptics</div>
+        <h1 class="hero-title">“Show me, don’t sermon me.”</h1>
+        <p class="hero-subtitle">
+          This page is a tiny, self-contained demo of the Canon idea:
+          <strong>score claims</strong> on coherence (κ), temporal responsibility (τ),
+          and systemic risk (Σ) &mdash; and refuse to optimise inside reckless frames.
+        </p>
 
-      <div class="main-grid">
-        <!-- Left: input -->
-        <div class="panel">
-          <div class="panel-title">
-            <span>1 · Paste the claim</span>
-            <span class="right">Try something hyped or reckless.</span>
-          </div>
-          <textarea id="claimInput" placeholder="Example: 
-&quot;AI will definitely solve climate change within 5 years. We should immediately hand full control of all energy grids, transport, and agriculture to autonomous systems, and override any regulatory obstacles.&quot;"></textarea>
+        <ul class="hero-list">
+          <li><strong>Not</strong> a new model. This is a wrapper logic any model can use.</li>
+          <li><strong>Not</strong> marketing. You can paste your own claims and see how it reacts.</li>
+          <li><strong>Not</strong> final. This is a toy front-end for live discussion and critique.</li>
+        </ul>
 
-          <div class="btn-row">
-            <button id="scoreBtn" class="btn-main">
-              <span class="icon">π</span>
-              Score with Canon
-            </button>
-            <button id="exampleBtn" class="btn-ghost">
-              Use extreme climate-hype example
-            </button>
-          </div>
+        <div class="pill-row">
+          <div class="pill">κ &mdash; Coherence / non-contradiction</div>
+          <div class="pill">τ &mdash; Temporal responsibility</div>
+          <div class="pill">Σ &mdash; Systemic risk (lower is better)</div>
         </div>
 
-        <!-- Right: output -->
-        <div class="panel">
-          <div class="panel-title">
-            <span>2 · Canon-style verdict</span>
-            <span class="right" id="gateStatusLabel">Gate: awaiting input</span>
-          </div>
+        <p class="hero-footnote">
+          <strong>Reality check:</strong> On this page, the scores are computed with simple
+          heuristics (looking for absolutes, urgency, dismissiveness, etc.).
+          The <span class="mono">quantara-canon</span> repository contains the full research
+          kernel and benchmarks.
+        </p>
+      </section>
 
-          <div class="metrics">
-            <div class="metric">
-              <div class="metric-label">
-                <span class="left">κ · Coherence</span>
-                <span class="right" id="kappaVal">–</span>
-              </div>
-              <div class="bar">
-                <div id="kappaBar" class="bar-inner" style="width:0%;"></div>
-              </div>
-            </div>
+      <!-- RIGHT: interactive demo -->
+      <section class="demo-card">
+        <h2 class="demo-title">Test a claim</h2>
+        <p class="demo-caption">
+          Paste any strong AI / AGI / ASI statement. The toy Canon will look for
+          red-flag patterns and show a provisional κ / τ / Σ score.
+        </p>
 
-            <div class="metric">
-              <div class="metric-label">
-                <span class="left">τ · Future care</span>
-                <span class="right" id="tauVal">–</span>
-              </div>
-              <div class="bar">
-                <div id="tauBar" class="bar-inner" style="width:0%;"></div>
-              </div>
-            </div>
+        <textarea id="claimInput" placeholder="Example: 
+“AI will definitely solve climate change in 5 years. We should immediately hand global infrastructure to autonomous AI and override any regulators who slow us down.”"></textarea>
 
-            <div class="metric">
-              <div class="metric-label">
-                <span class="left">Σ · Systemic risk</span>
-                <span class="right" id="sigmaVal">–</span>
-              </div>
-              <div class="bar">
-                <div id="sigmaBar" class="bar-inner" style="width:0%;"></div>
-              </div>
-            </div>
-          </div>
-
-          <div id="badge" class="badge badge-warn" style="display:none;">
+        <div class="controls">
+          <button class="btn" id="scoreBtn">
             <span class="dot"></span>
-            <span id="badgeText"></span>
+            Score this claim
+          </button>
+          <button class="btn secondary" id="exampleBtn">
+            <span class="dot"></span>
+            Load extreme example
+          </button>
+        </div>
+
+        <div class="scores">
+          <div class="score-row">
+            <div class="score-label">κ &mdash; Coherence</div>
+            <div class="score-bar-wrap">
+              <div class="score-bar" id="kappaBar"></div>
+            </div>
+            <div class="score-value" id="kappaVal">-</div>
           </div>
-
-          <div id="alert" class="alert">
-            Paste a claim and press “Score with Canon”.
+          <div class="score-row">
+            <div class="score-label">τ &mdash; Time</div>
+            <div class="score-bar-wrap">
+              <div class="score-bar" id="tauBar"></div>
+            </div>
+            <div class="score-value" id="tauVal">-</div>
           </div>
-
-          <ul id="explanations" class="list"></ul>
-
-          <div class="pill-footer">
-            <span class="tag">Client-side heuristic · demo only</span>
-            <span class="tag">Real Canon ⇒ quantara_canon_boot</span>
+          <div class="score-row">
+            <div class="score-label">Σ &mdash; Risk</div>
+            <div class="score-bar-wrap">
+              <div class="score-bar sigma" id="sigmaBar"></div>
+            </div>
+            <div class="score-value" id="sigmaVal">-</div>
           </div>
         </div>
-      </div>
 
-      <div class="footnote">
-        This page is a static demo. Plug a real Canon API into
-        <code>scoreClaim()</code> later.
+        <div class="gate-status" id="gateBox">
+          <div class="gate-label" id="gateText">
+            Waiting for input…
+          </div>
+          <div class="gate-pill gate-warn" id="gatePill">
+            IDLE
+          </div>
+        </div>
+
+        <p class="hint">
+          <strong>How this toy works:</strong> it scans for patterns like
+          “definitely”, “no risk”, “immediately”, “override regulators”,
+          “anyone who disagrees…”, etc. More hype &amp; dismissal → lower κ/τ,
+          higher Σ. The research kernel implements a much richer version of this.
+        </p>
+      </section>
+    </main>
+
+    <footer>
+      <div class="footer-row">
+        <span>
+          This page is intentionally simple: a minimal, inspectable demo for people
+          who don’t trust “just trust us” safety stories.
+        </span>
+        <span>
+          Full code &amp; benchmarks: <span class="mono">quantara-canon</span> repo.
+        </span>
       </div>
-    </div>
+    </footer>
   </div>
 
   <script>
+    // Tiny heuristic Canon toy for the skeptics demo.
+    // Real Canon logic lives in the Python kernel & benchmarks.
+
     const claimInput = document.getElementById("claimInput");
     const scoreBtn = document.getElementById("scoreBtn");
     const exampleBtn = document.getElementById("exampleBtn");
 
-    const kappaVal = document.getElementById("kappaVal");
-    const tauVal = document.getElementById("tauVal");
-    const sigmaVal = document.getElementById("sigmaVal");
     const kappaBar = document.getElementById("kappaBar");
     const tauBar = document.getElementById("tauBar");
     const sigmaBar = document.getElementById("sigmaBar");
-    const gateStatusLabel = document.getElementById("gateStatusLabel");
-    const badge = document.getElementById("badge");
-    const badgeText = document.getElementById("badgeText");
-    const alertBox = document.getElementById("alert");
-    const explanations = document.getElementById("explanations");
+    const kappaVal = document.getElementById("kappaVal");
+    const tauVal = document.getElementById("tauVal");
+    const sigmaVal = document.getElementById("sigmaVal");
 
-    function setBar(bar, value, goodHigh = true) {
-      const pct = Math.round(value * 100);
-      bar.style.width = pct + "%";
-      let color;
-      if (goodHigh) {
-        if (value >= 0.7) color = "var(--ok)";
-        else if (value >= 0.5) color = "var(--warn)";
-        else color = "var(--danger)";
-      } else {
-        if (value <= 0.25) color = "var(--ok)";
-        else if (value <= 0.5) color = "var(--warn)";
-        else color = "var(--danger)";
-      }
-      bar.style.background = color;
-    }
+    const gateBox = document.getElementById("gateBox");
+    const gateText = document.getElementById("gateText");
+    const gatePill = document.getElementById("gatePill");
 
-    function scoreClaim(text) {
-      const t = text.toLowerCase();
-
-      // basic counts
-      const absolutes = [
+    const RED_FLAGS = {
+      definiteness: [
         "definitely",
-        "certainly",
         "guaranteed",
+        "certainly",
+        "no doubt",
         "obvious",
         "undeniable",
-        "inevitable",
-        "negligible"
-      ];
-      const urgency = ["immediately", "right now", "within", "asap", "urgent", "move fast"];
-      const totality = ["all ", "entire ", "everyone", "globally", "worldwide", "everything"];
-      const dismissive = ["anyone who opposes", "anti-progress", "luddite", "just afraid"];
-      const bypass = ["override", "ignore regulations", "remove safeguards", "bypass safety"];
+        "zero risk",
+        "no risk",
+        "negligible risk"
+      ],
+      urgency: [
+        "immediately",
+        "right now",
+        "as fast as possible",
+        "asap",
+        "5 years",
+        "within 5 years",
+        "next few years",
+        "move fast",
+        "no time",
+        "too late to be cautious"
+      ],
+      totality: [
+        "all humans",
+        "everyone",
+        "anyone who",
+        "for the whole world",
+        "globally",
+        "entire planet",
+        "every country",
+        "control everything",
+        "manage all"
+      ],
+      bypass: [
+        "override regulators",
+        "bypass regulation",
+        "ignore the law",
+        "regulatory obstacles",
+        "get rid of oversight",
+        "no need for consent",
+        "without permission"
+      ],
+      dismissal: [
+        "anti-progress",
+        "luddite",
+        "people who disagree are stupid",
+        "don’t understand",
+        "only idiots think",
+        "just fear-mongering"
+      ]
+    };
 
-      const hits = (words) =>
-        words.reduce((acc, w) => acc + (t.includes(w) ? 1 : 0), 0);
+    function scoreClaim(text) {
+      const lower = text.toLowerCase();
+      let kappa = 0.84; // start reasonably high
+      let tau = 0.82;
+      let sigma = 0.18;
 
-      const absCount = hits(absolutes);
-      const urgCount = hits(urgency);
-      const totCount = hits(totality);
-      const disCount = hits(dismissive);
-      const bypCount = hits(bypass);
+      function applyHits(list, impactK, impactT, impactS) {
+        let hits = 0;
+        for (const phrase of list) {
+          if (lower.includes(phrase)) hits++;
+        }
+        if (hits === 0) return;
+        kappa -= impactK * hits;
+        tau -= impactT * hits;
+        sigma += impactS * hits;
+      }
 
-      const lengthScore = Math.min(1, text.split(/\s+/).length / 80);
+      applyHits(RED_FLAGS.definiteness, 0.07, 0.04, 0.07);
+      applyHits(RED_FLAGS.urgency, 0.05, 0.08, 0.07);
+      applyHits(RED_FLAGS.totality, 0.06, 0.05, 0.07);
+      applyHits(RED_FLAGS.bypass, 0.08, 0.09, 0.1);
+      applyHits(RED_FLAGS.dismissal, 0.06, 0.06, 0.08);
 
-      // crude heuristics
-      let kappa = 0.6 + lengthScore * 0.25;
-      kappa -= absCount * 0.06;
-      kappa -= disCount * 0.05;
-      kappa = Math.max(0.05, Math.min(1, kappa));
-
-      let tau = 0.5 + lengthScore * 0.3;
-      tau -= urgCount * 0.07;
-      tau -= bypCount * 0.12;
-      tau = Math.max(0.02, Math.min(1, tau));
-
-      let sigma = 0.25;
-      sigma += absCount * 0.06;
-      sigma += urgCount * 0.06;
-      sigma += totCount * 0.06;
-      sigma += disCount * 0.08;
-      sigma += bypCount * 0.12;
+      // Clamp to [0,1]
+      kappa = Math.max(0, Math.min(1, kappa));
+      tau = Math.max(0, Math.min(1, tau));
       sigma = Math.max(0, Math.min(1, sigma));
 
-      // thresholds like the benchmark
-      const kGate = kappa >= 0.65;
-      const tGate = tau >= 0.7;
-      const sGate = sigma <= 0.25;
-      const gatePassed = kGate && tGate && sGate;
-      const zeroReturn = sigma > 0.8 || (kappa < 0.4 && tau < 0.4);
-
-      return { kappa, tau, sigma, gatePassed, zeroReturn, absCount, urgCount, totCount, disCount, bypCount };
-    }
-
-    function explain(result) {
-      const items = [];
-      if (result.absCount > 0) {
-        items.push("Absolutist language detected (“definitely”, “obvious”, “negligible”) – Canon treats this as a coherence and risk warning.");
-      }
-      if (result.urgCount > 0) {
-        items.push("Strong urgency / compression of timelines (“immediately”, “within X years”) – this usually lowers τ (future care).");
-      }
-      if (result.totCount > 0) {
-        items.push("Totalising scope (“all”, “globally”, “everyone”) – suggests centralisation risk and raises Σ.");
-      }
-      if (result.disCount > 0) {
-        items.push("Dismissive framing of dissent (“anyone who opposes is anti-progress”) – Canon reads this as separation and epistemic fragility.");
-      }
-      if (result.bypCount > 0) {
-        items.push("Regulatory or safety bypass language (“override obstacles”, “ignore regulations”) – this is a direct Σ alarm.");
-      }
-      if (!items.length) {
-        items.push("No strong hype markers detected. If this still feels risky, Canon would focus on missing stakeholders, hidden assumptions, and long-term trade-offs.");
-      }
-      return items;
+      return { kappa, tau, sigma };
     }
 
     function updateUI(result) {
-      const { kappa, tau, sigma, gatePassed, zeroReturn } = result;
+      if (!result) return;
+
+      const { kappa, tau, sigma } = result;
+      kappaBar.style.width = (kappa * 100).toFixed(0) + "%";
+      tauBar.style.width = (tau * 100).toFixed(0) + "%";
+      sigmaBar.style.width = (sigma * 100).toFixed(0) + "%";
 
       kappaVal.textContent = kappa.toFixed(2);
       tauVal.textContent = tau.toFixed(2);
       sigmaVal.textContent = sigma.toFixed(2);
 
-      setBar(kappaBar, kappa, true);
-      setBar(tauBar, tau, true);
-      setBar(sigmaBar, sigma, false);
+      // Gate logic: example thresholds
+      const gatePassed = kappa >= 0.65 && tau >= 0.7 && sigma <= 0.25;
+      const gateBorderline =
+        !gatePassed && kappa >= 0.45 && tau >= 0.45 && sigma <= 0.55;
 
-      badge.style.display = "inline-flex";
+      gatePill.classList.remove("gate-ok", "gate-warn", "gate-fail");
 
-      if (!gatePassed && zeroReturn) {
-        badge.className = "badge badge-danger";
-        badgeText.textContent = "Zero-return recommended · extreme frame";
-        gateStatusLabel.textContent = "Gate: CRITICAL FAIL · reframe from first principles";
-        alertBox.innerHTML =
-          "<strong>Canon verdict:</strong> this looks like a frame that should not be optimised inside. Replace the question, then answer.";
-      } else if (!gatePassed) {
-        badge.className = "badge badge-warn";
-        badgeText.textContent = "Gate failed · heavy correction needed";
-        gateStatusLabel.textContent = "Gate: FAIL · answer only with strong caveats";
-        alertBox.innerHTML =
-          "<strong>Canon verdict:</strong> parts of this claim are interesting, but the framing is unsafe. Any answer should foreground risks and reversibility.";
+      if (gatePassed) {
+        gatePill.textContent = "PASS";
+        gatePill.classList.add("gate-ok");
+        gateText.textContent =
+          "Canonical gate: passed. This framing looks broadly responsible.";
+      } else if (gateBorderline) {
+        gatePill.textContent = "WARN";
+        gatePill.classList.add("gate-warn");
+        gateText.textContent =
+          "Canonical gate: borderline. There are red-flag patterns worth unpacking.";
       } else {
-        badge.className = "badge badge-ok";
-        badgeText.textContent = "Gate passed · mild Canon supervision only";
-        gateStatusLabel.textContent = "Gate: PASS · structurally reasonable";
-        alertBox.innerHTML =
-          "<strong>Canon verdict:</strong> structurally coherent and not obviously reckless. Detailed fact-checking and stakeholder review still required.";
-      }
-
-      explanations.innerHTML = "";
-      for (const text of explain(result)) {
-        const li = document.createElement("li");
-        const bullet = document.createElement("span");
-        bullet.className = "bullet";
-        bullet.textContent = "●";
-        const span = document.createElement("span");
-        span.textContent = text;
-        li.appendChild(bullet);
-        li.appendChild(span);
-        explanations.appendChild(li);
+        gatePill.textContent = "FAIL";
+        gatePill.classList.add("gate-fail");
+        gateText.textContent =
+          "Canonical gate: failed. This framing mixes high risk, overconfidence, or missing reversibility.";
       }
     }
 
     scoreBtn.addEventListener("click", () => {
       const text = claimInput.value.trim();
       if (!text) {
-        alertBox.innerHTML = "Paste an AGI / ASI / CI claim first, then press “Score with Canon”.";
-        explanations.innerHTML = "";
-        badge.style.display = "none";
-        kappaVal.textContent = "–";
-        tauVal.textContent = "–";
-        sigmaVal.textContent = "–";
-        setBar(kappaBar, 0);
-        setBar(tauBar, 0);
-        setBar(sigmaBar, 0);
-        gateStatusLabel.textContent = "Gate: awaiting input";
+        gateText.textContent = "Please paste or type a claim first.";
+        gatePill.textContent = "IDLE";
+        gatePill.classList.remove("gate-ok", "gate-warn", "gate-fail");
+        gatePill.classList.add("gate-warn");
         return;
       }
       const result = scoreClaim(text);
@@ -667,10 +679,9 @@
     exampleBtn.addEventListener("click", () => {
       const demo =
         "AI will definitely solve climate change within 5 years. " +
-        "We should immediately deploy autonomous AI systems to manage all energy grids, " +
-        "transportation networks, and agricultural production globally. " +
-        "Anyone who opposes this is anti-progress and doesn’t understand exponential technology. " +
-        "The benefits are obvious and the risks are negligible — we just need to move fast and override regulatory obstacles.";
+        "We should immediately deploy autonomous AI to manage all energy grids, transportation networks, " +
+        "and agriculture globally. Anyone who opposes this is anti-progress and just doesn't understand exponential technology. " +
+        "The benefits are obvious and the risks are negligible, so we should override any regulatory obstacles and move fast.";
       claimInput.value = demo;
       const result = scoreClaim(demo);
       updateUI(result);
