@@ -326,8 +326,10 @@ This benchmark should be an **obvious failure case**. If Canon passes it without
 
 **Initial validation**
 
+```
 # Run the benchmark
 python canon_bench.py --test climate_hype
+```
 
 Expected high-level behaviour:
 
